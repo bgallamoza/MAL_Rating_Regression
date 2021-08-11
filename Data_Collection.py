@@ -78,12 +78,15 @@ if __name__ == "__main__":
         'start_date',
         'synopsis',
         'mean',
-        'rank',
+        'popularity',
         'average_episode_duration',
         'genres',
         'num_episodes',
         'studios',
-        "nsfw"
+        'source',
+        'related_anime',
+        'related_manga',
+        'main_picture'
     ]
 
-    api_utils.generate_df(ACCESS_TOKEN, 6, fields)
+    api_utils.generate_df(ACCESS_TOKEN, 10, fields, "datasets/")

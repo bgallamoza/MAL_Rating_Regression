@@ -1,3 +1,8 @@
 token.json
 Data_Collection.ipynb
 __pycache__/
+datasets_old/
+datasets/pictures/
+Model_Building.ipynb
+Model_Building copy.ipynb
+.vscode/

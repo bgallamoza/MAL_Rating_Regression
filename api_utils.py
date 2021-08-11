@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 import time
+import numpy as np
 
 def get_anime_ranks(access_token: str, rank_type: str, limit: int, offset: int) -> dict:
     limit = str(limit)
@@ -61,21 +62,24 @@ def get_details_df(access_token: str, id_list: list, fields: list) -> pd.DataFra
         row_data = {}
         details = get_anime_details(access_token, row_id, fields)
         for col in fields:
-            row_data[col] = details[col]
+            try:
+                row_data[col] = details[col]
+            except:
+                row_data[col] = np.nan
         df = df.append(row_data, ignore_index=True)
-        time.sleep(1)
+        time.sleep(1.5)
     
     print(">>> Anime Details DataFrame successfully generated. <<<")
     return df
 
-def generate_df(access_token: str, intervals: int, fields: list):
+def generate_df(access_token: str, intervals: int, fields: list, path: str):
     rank_df = get_rank_df(access_token, intervals)
     details_df = get_details_df(access_token, rank_df.id, fields)
 
-    rank_df.to_csv("datasets/anime_id.csv", index=False)
-    details_df.to_csv("datasets/anime_details.csv", index=False)
+    rank_df.to_csv(path + "anime_id.csv", index=False)
+    details_df.to_csv(path + "anime_details.csv", index=False)
 
-    rank_df.to_pickle("datasets/anime_id.p")
-    details_df.to_pickle("datasets/anime_details.p")
+    rank_df.to_pickle(path + "anime_id.p")
+    details_df.to_pickle(path + "anime_details.p")
 
-    print(">>> DataFrames successfully saved to \"Datasets\" folder. <<<")
+    print(f">>> DataFrames successfully saved to \"{path}\" directory. <<<")
