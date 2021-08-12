@@ -1,9 +1,7 @@
 import pickle, gzip
 import json
-import pandas as pd
 
 __col_info = None
-__model = None
 __pipeline = None
 
 def set_col_info(file):
@@ -23,8 +21,8 @@ def get_data_columns():
 
     return get_col_info()['data_columns']
 
-def set_model(file):
-    """Model is loaded from a gzip file, which is then unpickled and used
+def set_pipeline(file):
+    """Pipeline is loaded from a gzip file, which is then unpickled and used
     to initialize __model"""
 
     print("Loading model...")
@@ -37,41 +35,26 @@ def set_model(file):
 
     print("Model successfully loaded")
 
-def get_model():
-    return __model
-
-def set_pipeline(file):
-    print("Loading pipeline...")
-    global __pipeline
-
-    with open("./artifacts/" + file, 'rb') as f:
-        __pipeline = pickle.load(f)
-
-    print("Pipeline successfully loaded")
-
 def get_pipeline():
     return __pipeline
 
-def make_prediction(model, pipeline, test_matrix):
+def make_prediction(pipeline, test_matrix):
     """Takes a model, pipeline, and test_matrix. Test matrix is
     transformed by the pipeline and fed into the model. A yes/no string
     is returned according to the prediction"""
     print(test_matrix)
-    test_matrix = pd.DataFrame(test_matrix, columns=get_data_columns())
-    test_matrix = pipeline.transform(test_matrix)
-    prediction = model.predict(test_matrix)
+    # test_matrix = pd.DataFrame(test_matrix, columns=get_data_columns())
+    prediction = pipeline.predict(test_matrix)
     
-    if (prediction == 1):
-        return "Yes"
-    else:
-        return "No"
+    return prediction[0]
 
 # Main function to test utils functionality
 if __name__ == "__main__":
     set_col_info('data_columns.json')
-    set_pipeline('pipeline.pickle')
-    set_model('randforest_model.pickle')
+    set_pipeline('gboost_pipe.pickle')
 
-    test_answers=[[123, 3, 5, 10, 2, 1, 50, 20, 1, 2, 0, 5, 1]]
+    test_sample = [[1500, 22, 30, 802, 0.06857142857142856, 0.0, 0.38619047619047614,
+       0.0, 2, 4.0, 1.0, 36.45189023030679, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+       1.0, 0.0, 0, 1.0, 0.0, 0.0, 0.0, 0.0, 1, 'manga']]
 
-    print(make_prediction(get_model(), get_pipeline(), test_answers))
+    print(make_prediction(get_pipeline(), test_sample))
