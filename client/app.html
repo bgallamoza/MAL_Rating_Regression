@@ -13,49 +13,45 @@
 <h2>Title and Synopsis</h2>
 
 <h3>Please enter your anime's title:</h3>
-    <input class="area"  type="text"  id="en_title" class="floatLabel" name="uiTitle" value="Your Title">
+    <input class="input"  type="text"  id="en_title" name="uiTitle" value="Your Title">
 <h3>Write the synopsis of your anime::</h3>
-    <input class="area"  type="text"  id="synopsis" class="floatLabel" name="uiSynopsis" value="Your Synopsis">
-
+    <textarea class="submission"  type="text"  id="synopsis" name="uiSynopsis" value="Your Synopsis"></textarea>
 <h2>Anime Information</h2>
 
 <h3>Please select your anime's genre(s):</h3>
-<ul class="checkbox-grid" name="uiGenres">
-    <li><input type="checkbox" name="genre1" value="value1" /><label for="text1">Text 1</label></li>
-    <li><input type="checkbox" name="genre2" value="value2" /><label for="text2">Text 2</label></li>
-    <li><input type="checkbox" name="genre3" value="value3" /><label for="text3">Text 3</label></li>
-    <li><input type="checkbox" name="genre4" value="value4" /><label for="text4">Text 4</label></li>
-    <li><input type="checkbox" name="genre5" value="value5" /><label for="text5">Text 5</label></li>
-    <li><input type="checkbox" name="genre6" value="value6" /><label for="text6">Text 6</label></li>
-    <li><input type="checkbox" name="genre7" value="value7" /><label for="text7">Text 7</label></li>
-    <li><input type="checkbox" name="genre8" value="value8" /><label for="text8">Text 8</label></li>
-</ul>
+<ul class="checkbox-grid" id="uiGenres"></ul>
 
 <h3>Please select your anime's studio(s):</h3>
-<ul class="checkbox-grid" name="uiStudios">
-    <li><input type="checkbox" name="genre1" value="value1" /><label for="text1">Text 1</label></li>
-    <li><input type="checkbox" name="genre2" value="value2" /><label for="text2">Text 2</label></li>
-    <li><input type="checkbox" name="genre3" value="value3" /><label for="text3">Text 3</label></li>
-    <li><input type="checkbox" name="genre4" value="value4" /><label for="text4">Text 4</label></li>
-    <li><input type="checkbox" name="genre5" value="value5" /><label for="text5">Text 5</label></li>
-    <li><input type="checkbox" name="genre6" value="value6" /><label for="text6">Text 6</label></li>
-    <li><input type="checkbox" name="genre7" value="value7" /><label for="text7">Text 7</label></li>
-    <li><input type="checkbox" name="genre8" value="value8" /><label for="text8">Text 8</label></li>
-</ul>
+<ul class="checkbox-grid" id="uiStudios"></ul>
 
 <h3>Don't see your studio on the list? Enter them here, separated by a comma</h3>
-    <input class="area"  type="text"  id="en_title" class="floatLabel" name="uiTitle">
+    <input class="input"  type="text"  id="en_title" class="floatLabel" name="uiTitle">
+
+<h3>What is your anime's source?</h3>
+    <div class="switch-field">
+        <input type="radio" id="source-1" name="uiSource" value="original"checked/>
+        <label for="source-1">Original</label>
+        <input type="radio" id="source-2" name="uiSource" value="manga"/>
+        <label for="source-2">Manga</label>
+        <input type="radio" id="source-3" name="uiSource" value="novel/book"/>
+        <label for="source-3">Novel/Book</label>
+        <input type="radio" id="source-4" name="uiSource" value="other"/>
+        <label for="source-4">Other</label>
+    </div>
+
+<h3>How many existing anime are there directly related to yours? (e.g. Sword Art Online is related to Sword Art Online II)</h3>
+    <input class="input"  type="number" min="0" id="num_related_anime" class="floatLabel" name="uiRelatedAnime" value="0">
 
 <h2>Episode Information</h2>
 
 <h3>How many episodes does your anime have?</h3>
-    <input class="area"  type="number" min="0" id="wrkdhrswk2" class="floatLabel" name="uiWrkdhrswk2" value="0">
+    <input class="input"  type="number" min="0" id="wrkdhrswk2" class="floatLabel" name="uiWrkdhrswk2" value="0">
 <h3>How long is an episode (in seconds)?</h3>
-    <input class="area"  type="number" min="0" id="wrkdhrswk2" class="floatLabel" name="uiWrkdhrswk2" value="0">
+    <input class="input"  type="number" min="0" id="wrkdhrswk2" class="floatLabel" name="uiWrkdhrswk2" value="0">
 
 
-    <button class="submit" onclick="on_clicked_coccrk_pred()" type="button">Predict!</button>
-    <div id="uiCoccrk_pred" class="result"><h3></h3> </div>
+    <button class="submit" onclick="on_clicked_rating_pred()" type="button">Predict!</button>
+    <div id="uiRating" class="result"><h3></h3> </div>
     <div id="uiError" class="result"><h3></h3> </div>
 </body>
 </html>

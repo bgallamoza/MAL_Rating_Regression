@@ -223,18 +223,43 @@ function onPageLoad() {
         if(data) {
             // "locations" is a key in data, which is a JSON
             var genres = data.genres;
-            var uiGenres = document.getElementById("uiGenres") // uiLocations is the drop down
             $('#uiGenres').empty(); // Empties the options in drop down
-            for (var genre in genres) {
+            for (var i in genres) {
                 var checkbox = document.createElement('input')
                 checkbox.type = "checkbox"
-                checkbox.name = genre
+                checkbox.name = genres[i]
                 var label = document.createElement('label')
-                label.htmlFor = genre
-                label.textContent = genre
+                label.htmlFor = genres[i]
+                label.textContent = genres[i]
+                
+                var list = document.createElement('li')
+                list.appendChild(checkbox)
+                list.appendChild(label)
+                $('#uiGenres').append(list) // Adds new option
+            }
+        }
+    });
 
-                $('#uiGenres').append(checkbox) // Adds new option
-                $('#uiGenres').append(label) // Adds new option
+    // $ is an alias for jQuery
+    // Makes GET call at our url, the response is returned as the data variable
+    $.get(url, function(data, status) {
+        console.log("Got response for get_column_info request");
+        if(data) {
+            // "locations" is a key in data, which is a JSON
+            var studios = data.studios;
+            $('#uiStudios').empty();
+            for (var i in studios) {
+                var checkbox = document.createElement('input')
+                checkbox.type = "checkbox"
+                checkbox.name = studios[i]
+                var label = document.createElement('label')
+                label.htmlFor = studios[i]
+                label.textContent = studios[i]
+                
+                var list = document.createElement('li')
+                list.appendChild(checkbox)
+                list.appendChild(label)
+                $('#uiStudios').append(list) // Adds new option
             }
         }
     });
