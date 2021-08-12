@@ -21,10 +21,12 @@ def predict_crkcoc_usage():
     finally sent into a json as a response"""
     data_columns = utils.get_data_columns()
 
+    form_dict = utils.add_len_sentiment(request.form.to_dict())
+
     answers = []
     for col in data_columns:
         # Create an array of feature values in order of data_columns
-        entry = request.form[col]
+        entry = form_dict[col]
 
         # Invalid entries have an "Error" value for their key
         if (entry == "Error"):

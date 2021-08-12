@@ -172,8 +172,8 @@ function post_error(input) {
     }
 }
 
-function on_clicked_coccrk_pred() {
-    console.log("Coccrk prediction button clicked")
+function on_clicked_rating_pred() {
+    console.log("Rating prediction button clicked")
     
     var prediction = document.getElementById("uiCoccrk_pred");
     var url = "http://127.0.0.1:5000/predict_crkcoc_usage"; // Use if NOT using nginx
@@ -210,3 +210,35 @@ function on_clicked_coccrk_pred() {
         }
     })
 }
+
+function onPageLoad() {
+    console.log("Document loaded");
+    var url = "http://127.0.0.1:5000/get_column_info"; // Use if NOT using nginx
+    // var url = "/api/get_location_names"; // Use if using nginx
+    
+    // $ is an alias for jQuery
+    // Makes GET call at our url, the response is returned as the data variable
+    $.get(url, function(data, status) {
+        console.log("Got response for get_column_info request");
+        if(data) {
+            // "locations" is a key in data, which is a JSON
+            var genres = data.genres;
+            var uiGenres = document.getElementById("uiGenres") // uiLocations is the drop down
+            $('#uiGenres').empty(); // Empties the options in drop down
+            for (var genre in genres) {
+                var checkbox = document.createElement('input')
+                checkbox.type = "checkbox"
+                checkbox.name = genre
+                var label = document.createElement('label')
+                label.htmlFor = genre
+                label.textContent = genre
+
+                $('#uiGenres').append(checkbox) // Adds new option
+                $('#uiGenres').append(label) // Adds new option
+            }
+        }
+    });
+}
+
+
+window.onload = onPageLoad;

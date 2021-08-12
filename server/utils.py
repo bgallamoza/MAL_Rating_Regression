@@ -1,5 +1,7 @@
-import pickle, gzip
+import pickle
+import gzip
 import json
+import eda_utils
 
 __col_info = None
 __pipeline = None
@@ -11,7 +13,7 @@ def set_col_info(file):
     with open("./artifacts/" + file, 'rb') as f:
         __col_info = json.load(f)
 
-    print("Data columns successfully loaded")
+    print("Data columns and information successfully loaded")
 
 def get_col_info():
     return __col_info
@@ -25,15 +27,15 @@ def set_pipeline(file):
     """Pipeline is loaded from a gzip file, which is then unpickled and used
     to initialize __model"""
 
-    print("Loading model...")
-    global __model
+    print("Loading Pipeline...")
+    global __pipeline
 
     with open("./artifacts/" + file, 'rb') as f:
         with gzip.open("./artifacts/" + file, 'rb') as f:
             p = pickle.Unpickler(f)
-            __model = p.load()
+            __pipeline = p.load()
 
-    print("Model successfully loaded")
+    print("Pipeline successfully loaded")
 
 def get_pipeline():
     return __pipeline
@@ -48,13 +50,33 @@ def make_prediction(pipeline, test_matrix):
     
     return prediction[0]
 
+def add_len_sentiment(form_dict):
+    # Length features
+    form_dict['title_len'] = eda_utils.get_len_text(form_dict['en_title'])
+    form_dict['synopsis_len'] = eda_utils.get_len_text(form_dict['synopsis'])
+    
+    # Polarity Sentiment
+    form_dict['synop_pol'] = eda_utils.get_polarity(form_dict['en_title'])
+    form_dict['title_pol'] = eda_utils.get_polarity(form_dict['synopsis'])
+
+    # Subjectivity Sentiment
+    form_dict['synop_subj'] = eda_utils.get_subjectivity(form_dict['en_title'])
+    form_dict['title_subj'] = eda_utils.get_subjectivity(form_dict['synopsis'])
+
+    return form_dict
+
 # Main function to test utils functionality
 if __name__ == "__main__":
     set_col_info('data_columns.json')
     set_pipeline('gboost_pipe.pickle')
 
     test_sample = [[1500, 22, 30, 802, 0.06857142857142856, 0.0, 0.38619047619047614,
-       0.0, 2, 4.0, 1.0, 36.45189023030679, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-       1.0, 0.0, 0, 1.0, 0.0, 0.0, 0.0, 0.0, 1, 'manga']]
+       0.0, 2, 4.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+       1.0, 0.0, 0, 1.0, 0.0, 0.0, 0.0, 1, 'manga']]
 
     print(make_prediction(get_pipeline(), test_sample))
+
+    test_dict = {"en_title": "Dogman Ultra",
+    "synopsis": "Dogman is a man who must try to defeat the evil Catguy from destroying the world! Can he do it? Who knows."}
+
+    print(add_len_sentiment(test_dict))
