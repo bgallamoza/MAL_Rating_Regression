@@ -211,6 +211,24 @@ function on_clicked_rating_pred() {
     })
 }
 
+function makeList(id, boxNames) {
+
+    $(id).empty(); // Empties the options in drop down
+    for (var i in boxNames) {
+        var checkbox = document.createElement('input')
+        checkbox.type = "checkbox"
+        checkbox.name = boxNames[i]
+        var label = document.createElement('label')
+        label.htmlFor = boxNames[i]
+        label.textContent = boxNames[i]
+        
+        var list = document.createElement('li')
+        list.appendChild(checkbox)
+        list.appendChild(label)
+        $(id).append(list) // Adds new option
+    };
+}
+
 function onPageLoad() {
     console.log("Document loaded");
     var url = "http://127.0.0.1:5000/get_column_info"; // Use if NOT using nginx
@@ -223,45 +241,11 @@ function onPageLoad() {
         if(data) {
             // "locations" is a key in data, which is a JSON
             var genres = data.genres;
-            $('#uiGenres').empty(); // Empties the options in drop down
-            for (var i in genres) {
-                var checkbox = document.createElement('input')
-                checkbox.type = "checkbox"
-                checkbox.name = genres[i]
-                var label = document.createElement('label')
-                label.htmlFor = genres[i]
-                label.textContent = genres[i]
-                
-                var list = document.createElement('li')
-                list.appendChild(checkbox)
-                list.appendChild(label)
-                $('#uiGenres').append(list) // Adds new option
-            }
+            var studios = data.studios
+            makeList('#uiGenres', genres)
+            makeList('#uiStudios', studios)
         }
-    });
-
-    // $ is an alias for jQuery
-    // Makes GET call at our url, the response is returned as the data variable
-    $.get(url, function(data, status) {
-        console.log("Got response for get_column_info request");
-        if(data) {
-            // "locations" is a key in data, which is a JSON
-            var studios = data.studios;
-            $('#uiStudios').empty();
-            for (var i in studios) {
-                var checkbox = document.createElement('input')
-                checkbox.type = "checkbox"
-                checkbox.name = studios[i]
-                var label = document.createElement('label')
-                label.htmlFor = studios[i]
-                label.textContent = studios[i]
-                
-                var list = document.createElement('li')
-                list.appendChild(checkbox)
-                list.appendChild(label)
-                $('#uiStudios').append(list) // Adds new option
-            }
-        }
+        console.log(status);
     });
 }
 
