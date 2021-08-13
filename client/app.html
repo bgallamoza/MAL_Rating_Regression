@@ -8,6 +8,7 @@
 <div class="img"></div>
 <h1>MyAnimeList Rating Prediction</h1>
 <form class="form">
+<br>
 <h2>Title and Synopsis</h2>
 
 <h3>Please enter your anime's title:</h3>
@@ -22,7 +23,7 @@
 <h3>Please select your anime's studio(s):</h3>
 <ul class="checkbox-grid" id="uiStudios"></ul>
 
-<h3>Don't see your studio on the list? Enter them here, separated by a comma</h3>
+<h3>Don't see your studio on the list? Enter the number of additional studios not shown above.</h3>
     <input class="input"  type="number"  id="extra_studio" name="uiExtraStudio" min="0" value="0">
 
 <h3>What is your anime's source?</h3>
@@ -50,6 +51,7 @@
     <button class="submit" onclick="on_clicked_rating_pred()" type="button">Predict!</button>
     <div id="uiRating" class="result"><h3></h3> </div>
     <div id="uiError" class="result"><h3></h3> </div>
+<br>
 </form>
 <script src="app.js" defer></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
