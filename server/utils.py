@@ -48,7 +48,7 @@ def make_prediction(pipeline, test_matrix):
     # test_matrix = pd.DataFrame(test_matrix, columns=get_data_columns())
     prediction = pipeline.predict(test_matrix)
     
-    return prediction[0]
+    return "{pred: .2f}".format(pred = prediction[0])
 
 def add_len_sentiment(form_dict):
     # Length features

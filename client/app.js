@@ -1,130 +1,135 @@
-function get_iralcfy() {
-    var uiIralcfy = document.getElementById("iralcfy");
-    var input = parseInt(uiIralcfy.value);
-    if ((input >= 0) & (input <= 365)) {
-        return input;
-    }
-    else {
-        return "Error";
-    }
+function get_en_title() {
+    var uiTitle = document.getElementById("en_title");
+    return uiTitle.value;
 }
 
-function get_catag3() {
-    var uiCatag3 = document.getElementsByName("uiCatag3");
-    for (var i in uiCatag3) {
-        // if a radio button is checked, we return the index + 1
-        if (uiCatag3[i].checked) {
-            return parseInt(i)+1;
+function get_synopsis() {
+    var uiSynopsis = document.getElementById("synopsis");
+    return uiSynopsis.value;
+}
+
+function get_num_genres() {
+    var count = 0;
+    var uiGenres = document.getElementsByName("Genres");
+    for (var i in uiGenres) {
+        // if a radio button is checked, we increment count
+        if (uiGenres[i].checked) {
+            count++;
         }
     }
-    return -1; // Invalid Value
+    return count.toString();
 }
 
-function get_health() {
-    var uiHealth = document.getElementsByName("uiHealth");
-    for (var i in uiHealth) {
-        // if a radio button is checked, we return the index + 1
-        if (uiHealth[i].checked) {
-            return parseInt(i)+1;
+function get_additional_studios() {
+    var uiExtraStudio = document.getElementById("extra_studio");
+    var value = uiExtraStudio.value;
+    if (value == "") {
+        return 0;
+    }
+    else if (parseInt(uiExtraStudio.value) < 0) {
+        return "";
+    } else {
+        return parseInt(uiExtraStudio.value);
+    }
+}
+
+function get_studio_checkboxes() {
+    var count = 0;
+    var uiStudios = document.getElementsByName("Studios");
+    for (var i in uiStudios) {
+        // if a radio button is checked, we increment count
+        if (uiStudios[i].checked) {
+            count++;
         }
     }
-    return -1; // Invalid Value
+    return count;
 }
 
-function get_ireduhighst2() {
-    return document.getElementById("ireduhighst2").value;
+function get_num_studios() {
+    var checkboxes = get_studio_checkboxes();
+    var add_studios = get_additional_studios();
+    console.log("Checkboxes: ", checkboxes, "  Add_Studios: ", add_studios);
+    if (add_studios != "" && add_studios < 0) {
+        return "";
+    }
+
+    var studios = checkboxes + add_studios;
+    if (studios <= 0) {
+        return "";
+    } else {
+        return studios.toString();
+    }
 }
 
-function get_irpinc3() {
-    return document.getElementById("irpinc3").value;
-}
-
-function get_irki17_2() {
-    var uiIrki17_2 = document.getElementsByName("uiIrki17_2");
-    for (var i in uiIrki17_2) {
+function get_source() {
+    var uiSource = document.getElementsByName("uiSource");
+    for (var i in uiSource) {
         // if a radio button is checked, we return the index + 1
-        if (uiIrki17_2[i].checked) {
-            return parseInt(i)+1;
+        if (uiSource[i].checked) {
+            return uiSource[i].value;
         }
     }
-    return -1; // Invalid Value
+    return ""; // Invalid Value
 }
 
-function get_irmjfy() {
-    var uiIrmjfy = document.getElementById("irmjfy");
-    var input = parseInt(uiIrmjfy.value);
-    if ((input >= 0) & (input <= 365)) {
-        return input;
-    }
-    else {
-        return "Error";
-    }
-}
-
-function get_wrkdhrswk2() {
-    var uiWrkdhrswk2 = document.getElementById("wrkdhrswk2");
-    var input = parseInt(uiWrkdhrswk2.value);
-    if ((input >= 0)) {
-        return input;
-    }
-    else {
-        return "Error";
+function get_num_related_anime() {
+    var uiRelatedAnime = document.getElementById("num_related_anime");
+    if (parseInt(uiRelatedAnime.value) < 0) {
+        return "";
+    } else {
+        return uiRelatedAnime.value;
     }
 }
 
-function get_irhhsiz2() {
-    var uiIrhhsiz2 = document.getElementsByName("uiIrhhsiz2");
-    for (var i in uiIrhhsiz2) {
-        // if a radio button is checked, we return the index + 1
-        if (uiIrhhsiz2[i].checked) {
-            return parseInt(i)+1;
+function get_num_episodes() {
+    var uiEpisodes = document.getElementById("num_episodes");
+    if (parseInt(uiEpisodes.value) <= 0) {
+        return "";
+    } else {
+        return uiEpisodes.value;
+    }
+}
+
+function get_average_episode_duration() {
+    var uiDuration = document.getElementById("average_episode_duration");
+    if (parseInt(uiDuration.value) <= 0) {
+        return "";
+    } else {
+        return parseInt(uiDuration.value);
+    }
+}
+
+function get_special_genres(genre) {
+    console.log(genre);
+    var uiGenre = document.getElementById(genre);
+    if (uiGenre.checked) {
+        return "1";
+    } else {
+        return "0";
+    }
+}
+
+function get_special_studios(studio) {
+    console.log(studio);
+    var uiStudio = document.getElementById(studio);
+    if (uiStudio.checked) {
+        return "1";
+    } else {
+        return "0";
+    }
+}
+
+function get_other_studio() {
+    var uiStudios = document.getElementsByName("Studios");
+    var studio_features = [ "EMT Squared", "Bones", "Production I.G", "A-1 Pictures", 
+                            "Madhouse", "Kyoto Animation", "Shaft", "DLE"]
+    for (var i in uiStudios) {
+        // if a radio button is checked, we increment count
+        if (uiStudios[i].checked && studio_features.indexOf(uiStudios[i].id) == -1) {
+            return "1";
         }
     }
-    return -1; // Invalid Value
-}
-
-function get_cig30use() {
-    var uiCig30use = document.getElementById("cig30use");
-    var input = parseInt(uiCig30use.value);
-    if ((input >= 0) & (input <= 31)) {
-        return input;
-    }
-    else {
-        return "Error";
-    }
-}
-
-function get_irherfy() {
-    var uiIrherfy = document.getElementById("irherfy");
-    var input = parseInt(uiIrherfy.value);
-    if ((input >= 0) & (input <= 365)) {
-        return input;
-    }
-    else {
-        return "Error";
-    }
-}
-
-function get_irmethamyfq() {
-    var uiIrmethamyfq = document.getElementById("irmethamyfq");
-    var input = parseInt(uiIrmethamyfq.value);
-    if ((input >= 0) & (input <= 365)) {
-        return input;
-    }
-    else {
-        return "Error";
-    }
-}
-
-function get_irsex() {
-    var uiIrsex = document.getElementsByName("uiIrsex")
-    for (var i in uiIrsex) {
-        // if a radio button is checked, we return the index + 1
-        if (uiIrsex[i].checked) {
-            return parseInt(i);
-        }
-    }
-    return -1; // Invalid Value
+    return "0";
 }
 
 function get_columns() {
@@ -146,25 +151,24 @@ function get_columns() {
 
 function post_error(input) {
     var uiError = document.getElementById("uiError");
-    input = parseInt(input);
     switch (input) {
-        case 0:
-            uiError.innerHTML = "<h3>Days consumed alcohol must be between 0 and 365</h3>";
+        case "average_episode_duration":
+            uiError.innerHTML = "<h3>Your average episode duration must be above 0!</h3>";
             break;
-        case 6:
-            uiError.innerHTML = "<h3>Days used marijuana must be between 0 and 365</h3>";
+        case "num_episodes":
+            uiError.innerHTML = "<h3>You must have at least 1 episode!</h3>";
             break;
-        case 7:
-            uiError.innerHTML = "<h3>Hours worked last week must be non-negative</h3>";
+        case "title_len":
+            uiError.innerHTML = "<h3>Title left blank!</h3>";
             break;
-        case 9:
-            uiError.innerHTML = "<h3>Days smoked cigarettes must be between 0 and 31</h3>";
+        case "synopsis_len":
+            uiError.innerHTML = "<h3>Synopsis left blank!</h3>";
             break;
-        case 10:
-            uiError.innerHTML = "<h3>Days used heroine must be between 0 and 365</h3>";
+        case "num_studios":
+            uiError.innerHTML = "<h3>Studio input incorrect! Make sure you have at least 1 studio and your extra studio number is positive!</h3>";
             break;
-        case 11:
-            uiError.innerHTML = "<h3>Days used methamphetamine must be between 0 and 365</h3>";
+        case "num_genres":
+            uiError.innerHTML = "<h3>You need at least 1 genre!</h3>";
             break;
         default:
             uiError.innerHTML = "<h3></h3>";
@@ -175,30 +179,34 @@ function post_error(input) {
 function on_clicked_rating_pred() {
     console.log("Rating prediction button clicked")
     
-    var prediction = document.getElementById("uiCoccrk_pred");
-    var url = "http://127.0.0.1:5000/predict_crkcoc_usage"; // Use if NOT using nginx
+    var prediction = document.getElementById("uiRating");
+    var url = "http://127.0.0.1:5000/predict_rating"; // Use if NOT using nginx
     // var url = "/api/predict_home_price"; // Use if using nginx
 
-    $.post(url, {
-        iralcfy: get_iralcfy(),
-        catag3: get_catag3(),
-        health: get_health(),
-        ireduhighst2: get_ireduhighst2(),
-        irpinc3: get_irpinc3(),
-        irki17_2: get_irki17_2(),
-        irmjfy: get_irmjfy(),
-        wrkdhrswk2: get_wrkdhrswk2(),
-        irhhsiz2: get_irhhsiz2(),
-        cig30use: get_cig30use(),
-        irherfy: get_irherfy(),
-        irmethamyfq: get_irmethamyfq(),
-        irsex: get_irsex()
-    }, function(data, status) {
+    var form = {};
+    var entry_features = ["average_episode_duration", "num_episodes", "title_len", "synopsis_len", "en_title",
+                        "synopsis", "num_related_anime", "num_genres", "source", "num_studios", "other_studio"]
+    var genre_features = ["Drama", "Kids", "Shounen", "Sci-Fi", "Shoujo"];
+    var studio_features = [ "EMT Squared", "Bones", "Production I.G", "A-1 Pictures", "Madhouse",
+                            "Kyoto Animation", "Shaft", "DLE"];
+
+    for (i in entry_features) {
+        form[entry_features[i]] = window["get_" + entry_features[i]];
+    }
+    for (i in genre_features) {
+        form[genre_features[i]] = get_special_genres(genre_features[i]);
+    }
+    for (i in studio_features) {
+        form[studio_features[i]] = get_special_studios(studio_features[i]);
+    }
+    $.post(url, form, function(data, status) {
         console.log(data.crkcoc_pred);
 
         // Append this string into the html to show the estimated price
-        response = data.crkcoc_pred.toString();
-        if ((response != "Yes") & (response != "No")) {
+        response = data.rating.toString();
+        var isNumber = /\d\.\d\d/.test(response);
+        console.log(response, isNumber);
+        if (!isNumber) {
             post_error(response);
             prediction.innerHTML = "<h3>Invalid Values!</h3>";
             console.log(status);
@@ -215,17 +223,19 @@ function makeList(id, boxNames) {
 
     $(id).empty(); // Empties the options in drop down
     for (var i in boxNames) {
-        var checkbox = document.createElement('input')
-        checkbox.type = "checkbox"
-        checkbox.name = boxNames[i]
-        var label = document.createElement('label')
-        label.htmlFor = boxNames[i]
-        label.textContent = boxNames[i]
+        var checkbox = document.createElement('input');
+        checkbox.type = "checkbox";
+        checkbox.name = id.slice(3);
+        checkbox.id = boxNames[i];
+        var label = document.createElement('label');
+        label.htmlFor = boxNames[i];
+        label.textContent = boxNames[i];
         
-        var list = document.createElement('li')
-        list.appendChild(checkbox)
-        list.appendChild(label)
+        var list = document.createElement('li');
+        list.appendChild(checkbox);
+        list.appendChild(label);
         $(id).append(list) // Adds new option
+        console.log(boxNames[i]);
     };
 }
 
@@ -239,7 +249,6 @@ function onPageLoad() {
     $.get(url, function(data, status) {
         console.log("Got response for get_column_info request");
         if(data) {
-            // "locations" is a key in data, which is a JSON
             var genres = data.genres;
             var studios = data.studios
             makeList('#uiGenres', genres)
@@ -248,6 +257,5 @@ function onPageLoad() {
         console.log(status);
     });
 }
-
 
 window.onload = onPageLoad;

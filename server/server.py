@@ -15,7 +15,7 @@ def get_column_info():
     return utils.get_col_info()
 
 @app.route('/predict_rating', methods=['GET', 'POST'])
-def predict_crkcoc_usage():
+def predict_rating():
     """Request information is transferred into a 2D array, which is then preprocessed by an
     initialized pipeline. Pipeline output is fed into the model, where a prediction result is
     finally sent into a json as a response"""
@@ -28,12 +28,12 @@ def predict_crkcoc_usage():
         # Create an array of feature values in order of data_columns
         entry = form_dict[col]
 
-        # Invalid entries have an "Error" value for their key
-        if (entry == "Error"):
+        # Invalid entries have an "" value for their key
+        if (entry == ""):
             # Return the index of the data column with invalid entry, which is handled by
             # on_clicked_rating_pred() in app.js
             response = jsonify({
-                'rating': str(data_columns.index(col))
+                'rating': col
             })
 
             # No prediction; return immediately for error handling
