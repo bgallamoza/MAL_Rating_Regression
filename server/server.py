@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import utils
+import database
 
 app = Flask(__name__)
 CORS(app)
@@ -50,7 +51,17 @@ def predict_rating():
         'rating': utils.make_prediction(utils.get_pipeline(), [answers])
     })
 
+    # Add entry to database
+    database.insert_pred(form_dict, data_columns)
+
     return response
+
+@app.route('/get_db_row', methods=['GET', 'POST'])
+def get_db_row():
+    """Fetches the top nth scoring row in the mal_regression.db database"""
+
+    form_dict = request.form.to_dict()
+    return database.fetch_top_n(form_dict['n'])
 
 if __name__ == "__main__":
     print("Starting Python Flask Server for MyAnimeList Rating Prediction")
