@@ -47,12 +47,13 @@ def predict_rating():
                 answers.append(float(entry))
     
     # Make prediction, return response
+    rating = utils.make_prediction(utils.get_pipeline(), [answers]
     response = jsonify({
-        'rating': utils.make_prediction(utils.get_pipeline(), [answers])
+        'rating': rating
     })
 
     # Add entry to database
-    database.insert_pred(form_dict, data_columns)
+    database.insert_pred("database/mal_regression.db", form_dict)
 
     return response
 
@@ -61,7 +62,7 @@ def get_db_row():
     """Fetches the top nth scoring row in the mal_regression.db database"""
 
     form_dict = request.form.to_dict()
-    return database.fetch_top_n(form_dict['n'])
+    return database.fetch_top_n("database/mal_regression.db", form_dict['n'], form_dict['rows'])
 
 if __name__ == "__main__":
     print("Starting Python Flask Server for MyAnimeList Rating Prediction")
