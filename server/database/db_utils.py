@@ -65,11 +65,14 @@ def make_insert_query(form: dict) -> str:
             query += ("'" + form[feature[0]] + "',")
         else:
             query += (str(form[feature[0]]) + ",")
+    
+    print(query)
     return query[:-1] + ")"
 
 def insert_pred(path: str, form: dict):
     set_conn(path)
     set_cursor()
+    set_cols('predictions')
 
     cursor_execute(make_insert_query(form))
 
@@ -79,8 +82,9 @@ def insert_pred(path: str, form: dict):
 def fetch_top_n(path:str, n: int, rows: int) -> list:
     set_conn(path)
     set_cursor()
-    cursor_execute("SELECT * FROM predictions ORDER BY rating DESC LIMIT {rows} OFFSET {offset}".format(rows=rows, offset=n-1))
+    set_cols('predictions')
 
+    cursor_execute("SELECT * FROM predictions ORDER BY rating DESC LIMIT {rows} OFFSET {offset}".format(rows=rows, offset=n-1))
     row_data = cursor_fetch()
 
     conn_commit()

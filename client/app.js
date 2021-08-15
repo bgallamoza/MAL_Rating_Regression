@@ -8,52 +8,71 @@ function get_synopsis() {
     return uiSynopsis.value;
 }
 
-function get_num_genres() {
-    var count = 0;
+function get_genres() {
+    var genres = [];
     var uiGenres = document.getElementsByName("Genres");
     for (var i in uiGenres) {
         // if a radio button is checked, we increment count
         if (uiGenres[i].checked) {
-            count++;
+            genres.push(uiGenres[i].id);
         }
     }
-    return count.toString();
+    return JSON.stringify(genres);
 }
 
-function get_additional_studios() {
+function get_num_genres() {
+    try {
+        num = JSON.parse(get_genres()).length
+        if (num <= 0) {
+            return "";
+        } else {
+            return num;
+        }
+    } catch (ex) {
+        console.error(ex);
+    }
+}
+
+function get_extra_studios() {
     var uiExtraStudio = document.getElementById("extra_studio");
     var value = uiExtraStudio.value;
     if (value == "") {
         return 0;
-    }
-    else if (parseInt(uiExtraStudio.value) < 0) {
+    } else if (parseInt(uiExtraStudio.value) < 0) {
         return "";
     } else {
         return parseInt(uiExtraStudio.value);
     }
 }
 
-function get_studio_checkboxes() {
-    var count = 0;
+function get_studios() {
+    var studios = [];
     var uiStudios = document.getElementsByName("Studios");
     for (var i in uiStudios) {
         // if a radio button is checked, we increment count
         if (uiStudios[i].checked) {
-            count++;
+            studios.push(uiStudios[i].id)
         }
     }
-    return count;
+    return JSON.stringify(studios);
 }
 
 function get_num_studios() {
-    var checkboxes = get_studio_checkboxes();
-    var add_studios = get_additional_studios();
-    console.log("Checkboxes: ", checkboxes, "  Add_Studios: ", add_studios);
-    if (add_studios != "" && add_studios < 0) {
+    var checkboxes;
+    var extra_studios = get_extra_studios();
+
+    try {
+        checkboxes = JSON.parse(get_studios()).length;
+    } catch (ex) {
+        console.error(ex);
+    }
+
+    console.log("Checkboxes: ", checkboxes, "  Add_Studios: ", extra_studios);
+    if (extra_studios != "" && extra_studios < 0) {
         return "";
     }
 
-    var studios = checkboxes + add_studios;
+    var studios = checkboxes + extra_studios;
     if (studios <= 0) {
         return "";
     } else {
@@ -184,13 +203,15 @@ function on_clicked_rating_pred() {
     // var url = "/api/predict_home_price"; // Use if using nginx
 
     var form = {};
-    var entry_features = ["average_episode_duration", "num_episodes", "title_len", "synopsis_len", "en_title",
-                        "synopsis", "num_related_anime", "num_genres", "source", "num_studios", "other_studio"]
+    var entry_features = ["average_episode_duration", "num_episodes", "synopsis", "en_title",
+                        "num_related_anime", "num_genres", "source", "num_studios", "other_studio",
+                            "studios", "genres", "extra_studios"]
     var genre_features = ["Drama", "Kids", "Shounen", "Sci-Fi", "Shoujo"];
     var studio_features = [ "EMT Squared", "Bones", "Production I.G", "A-1 Pictures", "Madhouse",
                             "Kyoto Animation", "Shaft", "DLE"];
 
     for (i in entry_features) {
+        // console.log(entry_features[i]);
         form[entry_features[i]] = window["get_" + entry_features[i]];
     }
     for (i in genre_features) {
@@ -199,6 +220,7 @@ function on_clicked_rating_pred() {
     for (i in studio_features) {
         form[studio_features[i]] = get_special_studios(studio_features[i]);
     }
+
     $.post(url, form, function(data, status) {
         console.log(data.crkcoc_pred);
 

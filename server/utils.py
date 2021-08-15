@@ -51,9 +51,18 @@ def make_prediction(pipeline, test_matrix):
     return "{pred: .2f}".format(pred = prediction[0])
 
 def add_len_sentiment(form_dict):
+    
     # Length features
-    form_dict['title_len'] = eda_utils.get_len_text(form_dict['en_title'])
-    form_dict['synopsis_len'] = eda_utils.get_len_text(form_dict['synopsis'])
+    title_len = eda_utils.get_len_text(form_dict['en_title'])
+    synopsis_len = eda_utils.get_len_text(form_dict['synopsis'])
+    if title_len == 0:
+        form_dict['title_len'] = ""
+    else:
+        form_dict['title_len'] = title_len
+    if title_len == 0:
+        form_dict['synopsis_len'] = ""
+    else:
+        form_dict['synopsis_len'] = synopsis_len
     
     # Polarity Sentiment
     form_dict['synop_pol'] = eda_utils.get_polarity(form_dict['en_title'])
