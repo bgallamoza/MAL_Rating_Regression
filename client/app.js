@@ -10,7 +10,7 @@ function get_synopsis() {
 
 function get_genres() {
     var genres = [];
-    var uiGenres = document.getElementsByName("Genres");
+    var uiGenres = document.getElementsByName("uigenres");
     for (var i in uiGenres) {
         // if a radio button is checked, we increment count
         if (uiGenres[i].checked) {
@@ -47,7 +47,7 @@ function get_extra_studios() {
 
 function get_studios() {
     var studios = [];
-    var uiStudios = document.getElementsByName("Studios");
+    var uiStudios = document.getElementsByName("uistudios");
     for (var i in uiStudios) {
         // if a radio button is checked, we increment count
         if (uiStudios[i].checked) {
@@ -139,7 +139,7 @@ function get_special_studios(studio) {
 }
 
 function get_other_studio() {
-    var uiStudios = document.getElementsByName("Studios");
+    var uiStudios = document.getElementsByName("uistudios");
     var studio_features = [ "EMT Squared", "Bones", "Production I.G", "A-1 Pictures", 
                             "Madhouse", "Kyoto Animation", "Shaft", "DLE"]
     for (var i in uiStudios) {
@@ -195,6 +195,47 @@ function post_error(input) {
     }
 }
 
+function get_nth_best() {
+    var uiNthBest = document.getElementById("nth_best");
+    if (parseInt(uiNthBest.value) < 1) {
+        return "";
+    } else {
+        return uiNthBest.value;
+    }
+}
+
+function on_clicked_nth_best() {
+    console.log("Nth best button clicked")
+    
+    var url = "http://127.0.0.1:5000/get_db_row"; // Use if NOT using nginx
+    var input_ids = ["en_title", "synopsis", "extra_studio", "num_related_anime", "num_episodes",
+                    "average_episode_duration"];
+
+    $.post(url, {"n": get_nth_best(), "rows": "1"}, function(data, status) {
+
+        // Inserting data into input fields
+        for (var id in input_ids) {
+            uiField = document.getElementById(input_ids[id]);
+            uiField.value = data[input_ids[id]];
+        }
+
+        var checknames = ["genres", "studios"];
+        for (var name in checknames) {
+            var checkboxes = document.getElementsByName("ui" + checknames[name]);
+            for (var box in checkboxes) {
+                checkboxes[box].checked = false;
+            }
+            var checked = JSON.parse(data[checknames[name]]);
+            console.log(checked);
+            for (var elem in checked) {
+                document.getElementById(checked[elem]).checked = true;
+            }
+        }
+        console.log(data["source"]);
+        document.getElementById(data["source"]).checked = true;
+    })
+}
+
 function on_clicked_rating_pred() {
     console.log("Rating prediction button clicked")
     
@@ -240,14 +281,14 @@ function on_clicked_rating_pred() {
     })
 }
 
-function makeList(id, boxNames) {
+function makeList(id_name, boxNames) {
 
-    $(id).empty(); // Empties the options in drop down
+    $(id_name).empty(); // Empties the options in drop down
     for (var i in boxNames) {
         var checkbox = document.createElement('input');
         checkbox.type = "checkbox";
-        checkbox.name = id.slice(3);
-        checkbox.id = boxNames[i];
+        checkbox.name = "ui" + id_name.slice(1); // removes pound sign
+        checkbox.id = boxNames[i]; // id is the same as the label
         var label = document.createElement('label');
         label.htmlFor = boxNames[i];
         label.textContent = boxNames[i];
@@ -255,36 +296,9 @@ function makeList(id, boxNames) {
         var list = document.createElement('li');
         list.appendChild(checkbox);
         list.appendChild(label);
-        $(id).append(list) // Adds new option
+        $(id_name).append(list) // Adds new option
         console.log(boxNames[i]);
     };
-}
-
-function get_nth_best() {
-    var uiNthBest = document.getElementById("nth_best");
-    if (parseInt(uiNthBest.value) < 1) {
-        return "";
-    } else {
-        return uiNthBest.value;
-    }
-}
-
-function on_clicked_nth_best() {
-    console.log("Nth best button clicked")
-    
-    var url = "http://127.0.0.1:5000/get_db_row"; // Use if NOT using nginx
-    var input_ids = ["en_title", "synopsis", "extra_studio", "num_related_anime", "num_episodes",
-                    "average_episode_duration"];
-
-    $.post(url, {"n": get_nth_best()}, function(data, status) {
-
-        // Inserting data into input fields
-        for (var id in input_ids) {
-            uiField = document.getElementById(input_ids[id]);
-            uiField.value = data[input_ids[id]];
-        }
-        uiSource = document.getElementById(data["source"])
-    })
 }
 
 function onPageLoad() {
@@ -299,8 +313,8 @@ function onPageLoad() {
         if(data) {
             var genres = data.genres;
             var studios = data.studios
-            makeList('#uiGenres', genres)
-            makeList('#uiStudios', studios)
+            makeList('#genres', genres)
+            makeList('#studios', studios)
         }
         console.log(status);
     });
