@@ -222,7 +222,6 @@ function on_clicked_rating_pred() {
     }
 
     $.post(url, form, function(data, status) {
-        console.log(data.crkcoc_pred);
 
         // Append this string into the html to show the estimated price
         response = data.rating.toString();
@@ -259,6 +258,33 @@ function makeList(id, boxNames) {
         $(id).append(list) // Adds new option
         console.log(boxNames[i]);
     };
+}
+
+function get_nth_best() {
+    var uiNthBest = document.getElementById("nth_best");
+    if (parseInt(uiNthBest.value) < 1) {
+        return "";
+    } else {
+        return uiNthBest.value;
+    }
+}
+
+function on_clicked_nth_best() {
+    console.log("Nth best button clicked")
+    
+    var url = "http://127.0.0.1:5000/get_db_row"; // Use if NOT using nginx
+    var input_ids = ["en_title", "synopsis", "extra_studio", "num_related_anime", "num_episodes",
+                    "average_episode_duration"];
+
+    $.post(url, {"n": get_nth_best()}, function(data, status) {
+
+        // Inserting data into input fields
+        for (var id in input_ids) {
+            uiField = document.getElementById(input_ids[id]);
+            uiField.value = data[input_ids[id]];
+        }
+        uiSource = document.getElementById(data["source"])
+    })
 }
 
 function onPageLoad() {

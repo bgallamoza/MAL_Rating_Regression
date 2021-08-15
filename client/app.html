@@ -28,14 +28,14 @@
 
 <h3>What is your anime's source?</h3>
     <div class="switch-field">
-        <input type="radio" id="source-1" name="uiSource" value="original"checked/>
-        <label for="source-1">Original</label>
-        <input type="radio" id="source-2" name="uiSource" value="manga"/>
-        <label for="source-2">Manga</label>
-        <input type="radio" id="source-3" name="uiSource" value="novel/book"/>
-        <label for="source-3">Novel/Book</label>
-        <input type="radio" id="source-4" name="uiSource" value="other"/>
-        <label for="source-4">Other</label>
+        <input type="radio" id="original" name="uiSource" value="original"checked/>
+        <label for="original">Original</label>
+        <input type="radio" id="manga" name="uiSource" value="manga"/>
+        <label for="manga">Manga</label>
+        <input type="radio" id="novel/book" name="uiSource" value="novel/book"/>
+        <label for="novel/book">Novel/Book</label>
+        <input type="radio" id="other" name="uiSource" value="other"/>
+        <label for="other">Other</label>
     </div>
 
 <h3>How many existing anime are there directly related to yours? (e.g. Sword Art Online is related to Sword Art Online II)</h3>
@@ -51,6 +51,12 @@
     <button class="submit" onclick="on_clicked_rating_pred()" type="button">Predict!</button>
     <div id="uiRating" class="result"><h3></h3> </div>
     <div id="uiError" class="result"><h3></h3> </div>
+<br>
+<br>
+<h2>Top Anime Predictions</h2>
+<h3>Retrieve information for the nth best prediction and post it to the form fields.</h3>
+    <input class="input"  type="number" min="1" id="nth_best" name="uiNthBest" value="1">
+    <button class="submit" onclick="on_clicked_nth_best()" type="button">Retrieve Anime Details</button>
 <br>
 </form>
 <script src="app.js" defer></script>

@@ -63,9 +63,15 @@ def predict_rating():
 @app.route('/get_db_row', methods=['GET', 'POST'])
 def get_db_row():
     """Fetches the top nth scoring row in the mal_regression.db database"""
-
+    response = {}
     form_dict = request.form.to_dict()
-    return db_utils.fetch_top_n("database/mal_regression.db", form_dict['n'], form_dict['rows'])
+    field_values = db_utils.fetch_top_n("database/mal_regression.db", form_dict['n'], form_dict['rows'])[0]
+    fields = db_utils.get_cols()
+
+    for value, field in zip(field_values, fields):
+        response[field[0]] = value
+
+    return jsonify(response)
 
 if __name__ == "__main__":
     print("Starting Python Flask Server for MyAnimeList Rating Prediction")

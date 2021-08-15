@@ -49,19 +49,16 @@ def set_cols(table_name: str):
 def get_cols() -> list:
     global __COLUMNS
     if __COLUMNS:
-        return __COLUMNS
+        return __COLUMNS[1:]
     else:
         return None
 
 def make_insert_query(form: dict) -> str:
     col_names = [i[0] for i in get_cols()]
-    col_names.remove('id')
 
     query = "INSERT INTO predictions{cols} VALUES (".format(cols=tuple(col_names))
     for feature in get_cols():
-        if feature[0] == 'id':
-            continue
-        elif feature[1] == 'TEXT':
+        if feature[1] == 'TEXT':
             query += ("'" + form[feature[0]] + "',")
         else:
             query += (str(form[feature[0]]) + ",")
@@ -79,12 +76,16 @@ def insert_pred(path: str, form: dict):
     conn_commit()
     conn_close()
 
-def fetch_top_n(path:str, n: int, rows: int) -> list:
+def fetch_top_n(path:str, n: str, rows: str) -> list:
     set_conn(path)
     set_cursor()
     set_cols('predictions')
+    col_names = ",".join([i[0] for i in get_cols()])
 
-    cursor_execute("SELECT * FROM predictions ORDER BY rating DESC LIMIT {rows} OFFSET {offset}".format(rows=rows, offset=n-1))
+    cursor_execute("""SELECT {col_names} FROM predictions ORDER BY 
+        rating DESC LIMIT {rows} OFFSET {offset}""".format(
+            col_names=col_names, rows=rows, offset=(int(n)-1)
+            ))
     row_data = cursor_fetch()
 
     conn_commit()
@@ -118,4 +119,4 @@ if __name__ == "__main__":
     conn_close()
 
     # insert_pred('mal_regression.db', form)
-    print(fetch_top_n("database/mal_regression.db", 1, 5))
+    print(fetch_top_n("server/database/mal_regression.db", 1, 1))
