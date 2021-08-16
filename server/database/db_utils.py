@@ -59,12 +59,6 @@ def get_cols() -> list:
 def make_insert_query(form: dict) -> str:
     col_names = [i[0] for i in get_cols()]
 
-    # query = "INSERT INTO predictions{cols} VALUES (".format(cols=tuple(col_names))
-    # for feature in get_cols():
-    #     if feature[1] == 'TEXT':
-    #         query += ("'" + form[feature[0]] + "',")
-    #     else:
-    #         query += (str(form[feature[0]]) + ",")
     fields = ",".join(['?' for i in range(len(col_names))])
     query = "INSERT INTO predictions{cols} VALUES ({fields})".format(
         cols=tuple(col_names), fields=fields
