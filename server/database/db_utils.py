@@ -34,8 +34,11 @@ def conn_commit():
 def conn_close():
     get_conn().close()
 
-def cursor_execute(query: str):
-    get_cursor().execute(query)
+def cursor_execute(query: str, values=None):
+    if values != None:
+        get_cursor().execute(query, tuple(values))
+    else:
+        get_cursor().execute(query)
 
 def cursor_fetch():
     return get_cursor().fetchall()
@@ -56,22 +59,29 @@ def get_cols() -> list:
 def make_insert_query(form: dict) -> str:
     col_names = [i[0] for i in get_cols()]
 
-    query = "INSERT INTO predictions{cols} VALUES (".format(cols=tuple(col_names))
-    for feature in get_cols():
-        if feature[1] == 'TEXT':
-            query += ("'" + form[feature[0]] + "',")
-        else:
-            query += (str(form[feature[0]]) + ",")
-    
-    print(query)
-    return query[:-1] + ")"
+    # query = "INSERT INTO predictions{cols} VALUES (".format(cols=tuple(col_names))
+    # for feature in get_cols():
+    #     if feature[1] == 'TEXT':
+    #         query += ("'" + form[feature[0]] + "',")
+    #     else:
+    #         query += (str(form[feature[0]]) + ",")
+    fields = ",".join(['?' for i in range(len(col_names))])
+    query = "INSERT INTO predictions{cols} VALUES ({fields})".format(
+        cols=tuple(col_names), fields=fields
+        )
+    values = [form[value[0]] for value in get_cols()]
+
+    print(query, values)
+    return query, values
 
 def insert_pred(path: str, form: dict):
     set_conn(path)
     set_cursor()
     set_cols('predictions')
 
-    cursor_execute(make_insert_query(form))
+    query, values = make_insert_query(form)
+
+    cursor_execute(query, values)
 
     conn_commit()
     conn_close()
