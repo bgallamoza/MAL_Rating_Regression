@@ -28,8 +28,6 @@ freetype==2.10.4==h546665d_1
 gunicorn==19.6.0==pypi_0
 icu==58.2==vc14hc45fdbb_0
 idna==3.1==pyhd3deb0d_0
-importlib-metadata==2.0.0==py_1
-importlib_metadata==2.0.0==1
 imutils==0.5.4==pypi_0
 intel-openmp==2021.3.0==haa95532_3372
 ipykernel==5.3.4==py39h7b7c402_0
