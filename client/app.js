@@ -1,3 +1,4 @@
+// Beginning of basic functions to grab HTML field values
 function get_en_title() {
     var uiTitle = document.getElementById("en_title");
     return uiTitle.value;
@@ -12,7 +13,6 @@ function get_genres() {
     var genres = [];
     var uiGenres = document.getElementsByName("uigenres");
     for (var i in uiGenres) {
-        // if a radio button is checked, we increment count
         if (uiGenres[i].checked) {
             genres.push(uiGenres[i].id);
         }
@@ -49,7 +49,6 @@ function get_studios() {
     var studios = [];
     var uiStudios = document.getElementsByName("uistudios");
     for (var i in uiStudios) {
-        // if a radio button is checked, we increment count
         if (uiStudios[i].checked) {
             studios.push(uiStudios[i].id)
         }
@@ -58,6 +57,8 @@ function get_studios() {
 }
 
 function get_num_studios() {
+    /* Functions by combining get_extra_studios() and get_studios()
+        to get a total studios value */
     var checkboxes;
     var extra_studios = get_extra_studios();
 
@@ -83,7 +84,6 @@ function get_num_studios() {
 function get_source() {
     var uiSource = document.getElementsByName("uiSource");
     for (var i in uiSource) {
-        // if a radio button is checked, we return the index + 1
         if (uiSource[i].checked) {
             return uiSource[i].value;
         }
@@ -117,7 +117,10 @@ function get_average_episode_duration() {
         return parseInt(uiDuration.value);
     }
 }
+// End of basic functions to grab HTML field values
 
+/* Special genres/studios refers to classes that were given an explicit
+column in the dataset (i.e., things that are NOT "other_studios" or "other_Genres" "*/
 function get_special_genres(genre) {
     console.log(genre);
     var uiGenre = document.getElementById(genre);
@@ -143,7 +146,6 @@ function get_other_studio() {
     var studio_features = [ "EMT Squared", "Bones", "Production I.G", "A-1 Pictures", 
                             "Madhouse", "Kyoto Animation", "Shaft", "DLE"]
     for (var i in uiStudios) {
-        // if a radio button is checked, we increment count
         if (uiStudios[i].checked && studio_features.indexOf(uiStudios[i].id) == -1) {
             return "1";
         }
@@ -151,17 +153,16 @@ function get_other_studio() {
     return "0";
 }
 
+// Calls get_column_info endpoint in API to get dataset columns
 function get_columns() {
     console.log("Document loaded");
     var url = "http://127.0.0.1:5000/get_column_info"; // Use if NOT using nginx
     // var url = "/api/get_location_names"; // Use if using nginx
     
-    // $ is an alias for jQuery
-    // Makes GET call at our url, the response is returned as the data variable
     $.get(url, function(data, status) {
         console.log("Got response for get_column_info request");
         if(data) {
-            // "data_columns" is a key in data, which is a JSON
+            // "data_columns" is a key in data
             var data_columns = data.data_columns;
             return data_columns;
         }
@@ -169,7 +170,9 @@ function get_columns() {
 }
 
 function post_error(input) {
+    // Element to place error message
     var uiError = document.getElementById("uiError");
+    // Code corresponds to the data column index in server.py
     switch (input) {
         case "average_episode_duration":
             uiError.innerHTML = "<h3>Your average episode duration must be above 0!</h3>";
@@ -190,6 +193,7 @@ function post_error(input) {
             uiError.innerHTML = "<h3>You need at least 1 genre!</h3>";
             break;
         default:
+            // Blank error message otherwise
             uiError.innerHTML = "<h3></h3>";
             break;
     }
@@ -204,6 +208,7 @@ function get_nth_best() {
     }
 }
 
+// Function to post the top Nth values to the HTML form
 function on_clicked_nth_best() {
     console.log("Nth best button clicked")
     
@@ -213,12 +218,13 @@ function on_clicked_nth_best() {
 
     $.post(url, {"n": get_nth_best(), "rows": "1"}, function(data, status) {
 
-        // Inserting data into input fields
+        // Inserting numerical data into input fields
         for (var id in input_ids) {
             uiField = document.getElementById(input_ids[id]);
             uiField.value = data[input_ids[id]];
         }
 
+        // Clear checkboxes, then check ones in database row
         var checknames = ["genres", "studios"];
         for (var name in checknames) {
             var checkboxes = document.getElementsByName("ui" + checknames[name]);
@@ -231,6 +237,8 @@ function on_clicked_nth_best() {
                 document.getElementById(checked[elem]).checked = true;
             }
         }
+
+        // Check the source button in database row
         console.log(data["source"]);
         document.getElementById(data["source"]).checked = true;
     })
@@ -253,12 +261,15 @@ function on_clicked_rating_pred() {
 
     for (i in entry_features) {
         // console.log(entry_features[i]);
+        // all functions are named the same as the feature, dynamic way to call each func
         form[entry_features[i]] = window["get_" + entry_features[i]];
     }
     for (i in genre_features) {
+        // check if any special genres are checked
         form[genre_features[i]] = get_special_genres(genre_features[i]);
     }
     for (i in studio_features) {
+        // check if any special studios are checked
         form[studio_features[i]] = get_special_studios(studio_features[i]);
     }
 
@@ -266,14 +277,19 @@ function on_clicked_rating_pred() {
 
         // Append this string into the html to show the estimated price
         response = data.rating.toString();
+
+        // Predictions solely come in a 2 decimal float... check if true
         var isNumber = /\d\.\d\d/.test(response);
         console.log(response, isNumber);
+
         if (!isNumber) {
+            // Error handling when a non-prediction is received
             post_error(response);
             prediction.innerHTML = "<h3>Invalid Values!</h3>";
             console.log(status);
         }
         else {
+            // Post prediction otherwise
             prediction.innerHTML = "<h3>" + response + "</h3>";
             post_error("");
             console.log(status);
@@ -281,6 +297,7 @@ function on_clicked_rating_pred() {
     })
 }
 
+// Used in onPageLoad() to dynamically add checkboxes for studios and genres
 function makeList(id_name, boxNames) {
 
     $(id_name).empty(); // Empties the options in drop down
@@ -306,8 +323,6 @@ function onPageLoad() {
     var url = "http://127.0.0.1:5000/get_column_info"; // Use if NOT using nginx
     // var url = "/api/get_location_names"; // Use if using nginx
     
-    // $ is an alias for jQuery
-    // Makes GET call at our url, the response is returned as the data variable
     $.get(url, function(data, status) {
         console.log("Got response for get_column_info request");
         if(data) {

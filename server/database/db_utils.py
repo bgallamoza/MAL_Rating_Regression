@@ -9,7 +9,7 @@ def set_conn(path: str):
     __CONN = None
     __CONN = sqlite3.connect(path)
 
-def get_conn():
+def get_conn() -> sqlite3.Connection:
     global __CONN
     if __CONN:
         return __CONN
@@ -21,7 +21,7 @@ def set_cursor():
     __CURSOR = None
     __CURSOR = get_conn().cursor()
 
-def get_cursor():
+def get_cursor() -> sqlite3.Cursor:
     global __CURSOR
     if __CURSOR:
         return __CURSOR
@@ -40,7 +40,7 @@ def cursor_execute(query: str, values=None):
     else:
         get_cursor().execute(query)
 
-def cursor_fetch():
+def cursor_fetch() -> list:
     return get_cursor().fetchall()
 
 def set_cols(table_name: str):
@@ -56,7 +56,7 @@ def get_cols() -> list:
     else:
         return None
 
-def make_insert_query(form: dict) -> str:
+def make_insert_query(form: dict) -> (str, list):
     col_names = [i[0] for i in get_cols()]
 
     fields = ",".join(['?' for i in range(len(col_names))])
@@ -86,6 +86,7 @@ def fetch_top_n(path:str, n: str, rows: str) -> list:
     set_cols('predictions')
     col_names = ",".join([i[0] for i in get_cols()])
 
+    # Select query to return the top nth sample
     cursor_execute("""SELECT {col_names} FROM predictions ORDER BY 
         rating DESC LIMIT {rows} OFFSET {offset}""".format(
             col_names=col_names, rows=rows, offset=(int(n)-1)
@@ -97,6 +98,7 @@ def fetch_top_n(path:str, n: str, rows: str) -> list:
 
     return row_data
 
+# main func for testing functions
 if __name__ == "__main__":
     set_conn('mal_regression.db')
     print(get_conn())
