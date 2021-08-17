@@ -17,16 +17,17 @@ Hello! This repository documents my entire process obtaining, cleaning, and usin
 4. Random Forest Regression
 5. Gradient Boosting Regression
 
-To make my model more interactive, I also made a simple web application with Flask and a user interface built in HTML, JavaScript, and CSS. This allows users to obtain a prediction given their inputted data.
+To make my model more interactive, I also made a simple web application with Flask and a user interface built in HTML, JavaScript, and CSS. This allows users to obtain a prediction given their inputted data. There is also a 
 
 ## **Requirements**
-For this project, I used Python 3.9.5 Anaconda version 2021.05, which should come with all necessary libararies used throughout the project. Notable libraries used include:
+For this project, I used Python 3.9.5 Anaconda version 2021.05. Many libraries are used, including (but not limited to):
 1. Sklearn
 2. Pandas
 3. Matplotlib/Seaborn
 4. Flask/flask-cors
+5. SQLite 3
 
-To make this process easier, I have included a ```requirements.txt``` file to install all the necessary Python libraries. You can install these by navigating to your terminal and running:
+To install all libraries used and their dependencies I have included a ```requirements.txt``` for easy installation. You can install these by navigating to your terminal and running:
 
 ```pip install -r requirements.txt```
 
@@ -38,7 +39,9 @@ You can then activate the environment by entering into your terminal:
 
 ```conda activate mal```
 
-You should also have Git Bash
+You should also have Git Bash installed as well. You can install it here:
+
+https://git-scm.com/downloads
 
 ## **Summary**
 
@@ -46,7 +49,7 @@ MyAnimeList (MAL) is an online anime and manga database and community website th
 
 On MAL, a title's rating is calculated as a weighted score through this formula:
 
-### Weighted Score = $(\frac{v}{v + m}*S) + (\frac{m}{v + m}*C)$
+![alt text](/readme_pictures/equation.png "MAL Weighted Score Formula")
 
 > S = Average score for the anime/manga
 
@@ -83,7 +86,17 @@ Now, you can open ```app.html``` in the ```client``` folder and enter your infor
 
 ![alt text](/readme_pictures/website.png "Preview of the website, server/app.html")
 
-Have fun!
+## Using the Website*
+
+**This repo is set up for running the server **locally,** but these instructions are true for the local and deployed AWS EC2 instances*
+
+Enter information into the displayed fields and press "Predict!" to return a rating prediction displayed in the top yellow box.
+
+Invalid values will result in no prediction and an error message in the lower yellow box.
+
+Alternatively, you can also interact with the SQLite database by retrieving the "nth best" prediction (i.e., inputting 1 will give you the best prediction, 2 will give you the 2nd best, etc). Hitting "Retrieve Anime Details" will display that prediction's values in the form above.
+
+Thank you for looking at my project! Have fun!
 
 ## References
 
