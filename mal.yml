@@ -151,7 +151,6 @@ dependencies:
   - zlib=1.2.11=vc14h1cdd9ab_1
   - zstd=1.4.9=h6255e5f_0
   - pip:
-    - gunicorn==19.6.0
     - imutils==0.5.4
     - opencv-contrib-python==4.5.3.56
 prefix: C:\Users\Brennan\anaconda3\envs\mal

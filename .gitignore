@@ -2,7 +2,7 @@ token.json
 Data_Collection.ipynb
 __pycache__/
 datasets_old/
-datasets/pictures/
+pictures/
 .vscode/
 Reg Models*
 ref/

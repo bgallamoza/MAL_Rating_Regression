@@ -157,7 +157,7 @@ function get_other_studio() {
 function get_columns() {
     console.log("Document loaded");
     var url = "http://127.0.0.1:5000/get_column_info"; // Use if NOT using nginx
-    // var url = "/api/get_location_names"; // Use if using nginx
+    // var url = "/api/get_column_info"; // Use if using nginx
     
     $.get(url, function(data, status) {
         console.log("Got response for get_column_info request");
@@ -213,6 +213,8 @@ function on_clicked_nth_best() {
     console.log("Nth best button clicked")
     
     var url = "http://127.0.0.1:5000/get_db_row"; // Use if NOT using nginx
+    // var url = "/api/get_db_row"; // Use if using nginx
+    
     var input_ids = ["en_title", "synopsis", "extra_studio", "num_related_anime", "num_episodes",
                     "average_episode_duration"];
 
@@ -249,7 +251,7 @@ function on_clicked_rating_pred() {
     
     var prediction = document.getElementById("uiRating");
     var url = "http://127.0.0.1:5000/predict_rating"; // Use if NOT using nginx
-    // var url = "/api/predict_home_price"; // Use if using nginx
+    // var url = "/api/predict_rating"; // Use if using nginx
 
     var form = {};
     var entry_features = ["average_episode_duration", "num_episodes", "synopsis", "en_title",
@@ -321,7 +323,7 @@ function makeList(id_name, boxNames) {
 function onPageLoad() {
     console.log("Document loaded");
     var url = "http://127.0.0.1:5000/get_column_info"; // Use if NOT using nginx
-    // var url = "/api/get_location_names"; // Use if using nginx
+    // var url = "/api/get_column_info"; // Use if using nginx
     
     $.get(url, function(data, status) {
         console.log("Got response for get_column_info request");
