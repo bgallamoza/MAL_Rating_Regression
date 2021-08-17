@@ -1,6 +1,14 @@
 # MyAnimeList (MAL) Anime Rating Prediction
 ## **Building a machine learning model to predict MAL ratings**
 
+### This model is accessible through an Amazon Web Service (AWS) EC2 instance! Access the model here*: 
+
+### http://ec2-3-144-31-219.us-east-2.compute.amazonaws.com/
+
+**The site may sometimes be offline for maintenance, thank you for understanding*
+
+-----------------------------------------------------------------------------
+
 Hello! This repository documents my entire process obtaining, cleaning, and using MAL API data to construct a few regression models that predict a MAL rating for a theoretical anime. These models include:
 
 1. Linear Regression
@@ -9,18 +17,10 @@ Hello! This repository documents my entire process obtaining, cleaning, and usin
 4. Random Forest Regression
 5. Gradient Boosting Regression
 
-This process is laid out in two Jupyter Notebooks:
-
-### **Exploratory Data Analysis (EDA.ipynb)**
-    Data preprocessing; includes all cleaning, exploring, and graphing in the dataset
-
-### **Model_Building.ipynb**
-    Pipeline and model building process, including hyperparameter testing with GridSearchCV
-
 To make my model more interactive, I also made a simple web application with Flask and a user interface built in HTML, JavaScript, and CSS. This allows users to obtain a prediction given their inputted data.
 
-## **Libraries Used**
-For this project, I used Anaconda version 2021.05, which should come with all necessary libararies used throughout the project. Notable libraries used include:
+## **Requirements**
+For this project, I used Python 3.9.5 Anaconda version 2021.05, which should come with all necessary libararies used throughout the project. Notable libraries used include:
 1. Sklearn
 2. Pandas
 3. Matplotlib/Seaborn
@@ -37,6 +37,8 @@ Alternatively, if you have Anaconda installed, I included the environment I used
 You can then activate the environment by entering into your terminal:
 
 ```conda activate mal```
+
+You should also have Git Bash
 
 ## **Summary**
 
@@ -61,7 +63,15 @@ Due to the popularity of MAL and its use of a weighted score, the MAL rating is 
 Using the MAL API, features were either used directly or used in feature engineering processes to generate new variables. 
 
 ## **Choosing a model**
-Five different supervised regressors were trained and tested: linear regressor, lasso regressor, ridge regressor, random forest regressor, and gradient boosting regressor. For each model, different hyperparameters were tuned. **Ultimately, the Gradient Boosting Regressor was chosen for producing the highest $R^2$ value and the lowest MSE and MAE.** 
+Five different supervised regressors were trained and tested: linear regressor, lasso regressor, ridge regressor, random forest regressor, and gradient boosting regressor. For each model, different hyperparameters were tuned. **Ultimately, the Gradient Boosting Regressor was chosen for producing the highest $R^2$ value and the lowest MSE and MAE.**
+
+This process is laid out in two Jupyter Notebooks:
+
+### Exploratory Data Analysis (EDA.ipynb)
+- Data preprocessing; includes all cleaning, exploring, and graphing in the dataset
+
+### Model_Building.ipynb
+- Pipeline and model building process, including hyperparameter testing with GridSearchCV
 
 ## **Running the Flask Server**
 
