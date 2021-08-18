@@ -66,7 +66,7 @@ Due to the popularity of MAL and its use of a weighted score, the MAL rating is 
 Using the MAL API, features were either used directly or used in feature engineering processes to generate new variables. 
 
 ## **Choosing a model**
-Five different supervised regressors were trained and tested: linear regressor, lasso regressor, ridge regressor, random forest regressor, and gradient boosting regressor. For each model, different hyperparameters were tuned. **Ultimately, the Gradient Boosting Regressor was chosen for producing the highest $R^2$ value and the lowest MSE and MAE.**
+Five different supervised regressors were trained and tested: linear regressor, lasso regressor, ridge regressor, random forest regressor, and gradient boosting regressor. For each model, different hyperparameters were tuned. **Ultimately, the Gradient Boosting Regressor was chosen for producing the lowest Mean Squared Error of 0.34**
 
 This process is laid out in two Jupyter Notebooks:
 
