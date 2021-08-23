@@ -41,16 +41,23 @@ def get_anime_details(access_token: str, id: str, fields: list) -> dict:
 
     return anime_details
 
-def get_rank_df(access_token: str, intervals: int) -> pd.DataFrame:
+def get_rank_df(access_token: str) -> pd.DataFrame:
     id_list = []
     title_list = []
+    offset = 0
+    is_last = False
 
-    for offset in range(intervals):
+    while not is_last:
         ranks = get_anime_ranks(access_token, 'tv', 500, 500*offset)
 
-        for i in range(len(ranks['data'])):
-            id_list.append(ranks['data'][i]['node']['id'])
-            title_list.append(ranks['data'][i]['node']['title'])
+        if len(ranks['data']) == 0:
+            is_last = True # Going past the last anime returns an empty list
+        else:
+            for i in range(len(ranks['data'])):
+                id_list.append(ranks['data'][i]['node']['id'])
+                title_list.append(ranks['data'][i]['node']['title'])
+
+        offset += 1
 
     print(">>> Anime Ranking DataFrame successfully generated. <<<")
     return pd.DataFrame.from_dict({"id":id_list, "Title":title_list})
@@ -65,15 +72,16 @@ def get_details_df(access_token: str, id_list: list, fields: list) -> pd.DataFra
             try:
                 row_data[col] = details[col]
             except:
+                # Animes lacking a field are supplied a NaN value
                 row_data[col] = np.nan
         df = df.append(row_data, ignore_index=True)
-        time.sleep(1.5)
+        time.sleep(1.5) # Prevents DoS warning
     
     print(">>> Anime Details DataFrame successfully generated. <<<")
     return df
 
-def generate_df(access_token: str, intervals: int, fields: list, path: str):
-    rank_df = get_rank_df(access_token, intervals)
+def generate_df(access_token: str, fields: list, path: str):
+    rank_df = get_rank_df(access_token)
     details_df = get_details_df(access_token, rank_df.id, fields)
 
     rank_df.to_csv(path + "anime_id.csv", index=False)

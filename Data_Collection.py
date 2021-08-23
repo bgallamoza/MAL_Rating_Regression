@@ -79,6 +79,7 @@ if __name__ == "__main__":
         'synopsis',
         'mean',
         'popularity',
+        "status",
         'average_episode_duration',
         'genres',
         'num_episodes',
@@ -89,4 +90,4 @@ if __name__ == "__main__":
         'main_picture'
     ]
 
-    api_utils.generate_df(ACCESS_TOKEN, 10, fields, "datasets/")
+    api_utils.generate_df(ACCESS_TOKEN, fields, "datasets/")
