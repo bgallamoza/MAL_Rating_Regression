@@ -257,9 +257,9 @@ function on_clicked_rating_pred() {
     var entry_features = ["average_episode_duration", "num_episodes", "synopsis", "en_title",
                         "num_related_anime", "num_genres", "source", "num_studios", "other_studio",
                             "studios", "genres", "extra_studios"]
-    var genre_features = ["Drama", "Kids", "Shounen", "Sci-Fi", "Shoujo"];
-    var studio_features = [ "EMT Squared", "Bones", "Production I.G", "A-1 Pictures", "Madhouse",
-                            "Kyoto Animation", "Shaft", "DLE"];
+    var genre_features = ["Drama", "Kids", "Shounen", "Mystery", "Psychological", "Supernatural"];
+    var studio_features = ["Bones", "Production I.G", "A-1 Pictures", "Madhouse",
+                            "Kyoto Animation", "Shaft", "DLE", "J.C.Staff"];
 
     for (i in entry_features) {
         // console.log(entry_features[i]);

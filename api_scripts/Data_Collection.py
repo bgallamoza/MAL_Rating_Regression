@@ -90,4 +90,4 @@ if __name__ == "__main__":
         'main_picture'
     ]
 
-    api_utils.generate_df(ACCESS_TOKEN, fields, "datasets/")
+    api_utils.generate_df(ACCESS_TOKEN, fields, "../datasets/")
