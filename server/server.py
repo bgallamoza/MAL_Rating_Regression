@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import utils
-from database import db_utils
+from utils import server_utils as su
+from utils import db_utils as du
 
 app = Flask(__name__)
 CORS(app)
@@ -13,16 +13,16 @@ cors = CORS(app, resources={
 
 @app.route('/get_column_info', methods=['GET'])
 def get_column_info():
-    return utils.get_col_info()
+    return su.get_col_info()
 
 @app.route('/predict_rating', methods=['GET', 'POST'])
 def predict_rating():
     """Request information is transferred into a 2D array, which is then preprocessed by an
     initialized pipeline. Pipeline output is fed into the model, where a prediction result is
     finally sent into a json as a response"""
-    data_columns = utils.get_data_columns()
+    data_columns = su.get_data_columns()
 
-    form_dict = utils.add_len_sentiment(request.form.to_dict())
+    form_dict = su.add_len_sentiment(request.form.to_dict())
     print(form_dict)
 
     answers = []
@@ -49,14 +49,14 @@ def predict_rating():
                 answers.append(float(entry))
     
     # Make prediction, return response
-    rating = utils.make_prediction(utils.get_pipeline(), [answers])
+    rating = su.make_prediction(su.get_pipeline(), [answers])
     response = jsonify({
         'rating': rating
     })
 
     # Add entry to database, only reaches this point if form is valid
     form_dict['rating'] = rating
-    db_utils.insert_pred("database/mal_regression.db", form_dict)
+    du.insert_pred("mal_regression.db", form_dict)
 
     return response
 
@@ -65,8 +65,8 @@ def get_db_row():
     """Fetches the top nth scoring row in the mal_regression.db database"""
     response = {}
     form_dict = request.form.to_dict()
-    field_values = db_utils.fetch_top_n("database/mal_regression.db", form_dict['n'], form_dict['rows'])[0]
-    fields = db_utils.get_cols()
+    field_values = du.fetch_top_n("mal_regression.db", form_dict['n'], form_dict['rows'])[0]
+    fields = du.get_cols()
 
     for value, field in zip(field_values, fields):
         response[field[0]] = value
@@ -75,6 +75,6 @@ def get_db_row():
 
 if __name__ == "__main__":
     print("Starting Python Flask Server for MyAnimeList Rating Prediction")
-    utils.set_col_info('data_columns.json')
-    utils.set_pipeline('gboost_pipe.pickle')
+    su.set_col_info('data_columns.json')
+    su.set_pipeline('gboost_pipe.pickle')
     app.run()
