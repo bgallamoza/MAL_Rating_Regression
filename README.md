@@ -3,7 +3,7 @@
 
 ### This model is accessible through an Amazon Web Service (AWS) EC2 instance! Access the model here*: 
 
-### http://ec2-3-144-31-219.us-east-2.compute.amazonaws.com/
+### http://ec2-3-133-118-103.us-east-2.compute.amazonaws.com/
 
 **The site may sometimes be offline for maintenance, thank you for understanding*
 
